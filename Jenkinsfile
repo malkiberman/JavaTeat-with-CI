@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'verisoft-2' } // אם את לא משתמשת בתווית, תשני ל: agent any
 
     parameters {
         string(name: 'REPO_URL', defaultValue: 'https://github.com/malkiberman/JavaTeat-with-CI.git', description: 'GitHub Repository URL')
@@ -10,10 +10,9 @@ pipeline {
         MAIN_BRANCH = 'main'
     }
 
-   triggers {
-    cron('30 5 * * 1\n0 14 * * *')
-  }
-
+    triggers {
+        cron('30 5 * * 1\n0 14 * * *') // שני 5:30 + כל יום 14:00
+    }
 
     stages {
         stage('Clone Repository') {
@@ -23,11 +22,11 @@ pipeline {
                 }
             }
             steps {
-                echo "Starting clone from custom branch: ${params.NAME_BRANCH}"
+                echo "🔄 Starting clone from custom branch: ${params.NAME_BRANCH}"
                 timeout(time: 5, unit: 'MINUTES') {
                     git branch: "${params.NAME_BRANCH}", url: "${params.REPO_URL}"
                 }
-                echo "Clone stage completed successfully"
+                echo "✅ Clone stage completed successfully"
             }
         }
 
@@ -38,41 +37,41 @@ pipeline {
                 }
             }
             steps {
-                echo "Starting default checkout (main branch)"
+                echo "🔄 Starting default checkout (main branch)"
                 timeout(time: 5, unit: 'MINUTES') {
                     checkout scm
                 }
-                echo "Checkout stage completed successfully"
+                echo "✅ Checkout stage completed successfully"
             }
         }
 
         stage('Compile') {
             steps {
-                echo "Starting compilation stage"
+                echo "🔧 Starting compilation stage"
                 timeout(time: 5, unit: 'MINUTES') {
                     sh 'mvn compile'
                 }
-                echo "Compilation stage completed successfully"
+                echo "✅ Compilation stage completed successfully"
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo "Starting test stage"
+                echo "🧪 Starting test stage"
                 timeout(time: 5, unit: 'MINUTES') {
                     sh 'mvn test'
                 }
-                echo "Test stage completed successfully"
+                echo "✅ Test stage completed successfully"
             }
         }
     }
 
     post {
         success {
-            echo "Pipeline completed successfully 🎉"
+            echo "🎉 Pipeline completed successfully!"
         }
         failure {
-            echo "Pipeline failed ❌"
+            echo "❌ Pipeline failed!"
         }
     }
 }
