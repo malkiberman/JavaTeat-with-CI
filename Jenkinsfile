@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'REPO_URL', defaultValue: 'https://github.com/YourUsername/your-repo.git', description: 'GitHub Repository URL')
+        string(name: 'REPO_URL', defaultValue: 'https://github.com/malkiberman/JavaTeat-with-CI.git', description: 'GitHub Repository URL')
         string(name: 'NAME_BRANCH', defaultValue: 'main', description: 'Branch to build from')
     }
 
@@ -10,10 +10,10 @@ pipeline {
         MAIN_BRANCH = 'main'
     }
 
-    triggers {
-        cron('30 5 * * 1') // Every Monday at 05:30
-        cron('0 14 * * *') // Every day at 14:00
-    }
+   triggers {
+    cron('30 5 * * 1\n0 14 * * *')
+  }
+
 
     stages {
         stage('Clone Repository') {
